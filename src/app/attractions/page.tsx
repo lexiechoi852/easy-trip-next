@@ -1,6 +1,7 @@
 import React from "react";
-import AttractionList from "@/components/AttractionList";
 import attractions from "@/assets/attractions";
+import AttractionList from "@/components/AttractionList";
+import SelectedContainer from "@/components/SelectedContainer";
 
 export const metadata = {
   title: "Attractions",
@@ -9,8 +10,11 @@ export const metadata = {
 
 export default async function Page() {
   return (
-    <div>
-      <AttractionList attractions={attractions} />
+    <div className="flex flex-col">
+      <div className=" mx-auto mt-4 flex overflow-scroll">
+        <SelectedContainer />
+        <AttractionList attractions={attractions} />
+      </div>
     </div>
   );
 }
