@@ -10,7 +10,7 @@ interface AttractionCardProps {
 
 export default function AttractionCard({ attraction }: AttractionCardProps) {
   return (
-    <section className="mx-auto max-w-sm rounded-lg border border-gray-300 p-4 shadow-lg">
+    <section className="mx-auto flex max-w-sm flex-col rounded-lg border border-gray-300 p-4 shadow-lg">
       <div className="group relative mb-auto">
         <h2 className="text-2xl font-semibold text-gray-800">
           {attraction.name}
