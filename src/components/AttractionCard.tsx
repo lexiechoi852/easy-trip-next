@@ -27,7 +27,7 @@ export default function AttractionCard({ attraction }: AttractionCardProps) {
         </p>
       </div>
       <div className="mt-2 flex justify-end">
-        <AddAttractionButton />
+        <AddAttractionButton attraction={attraction} />
         <ReadMore attraction={attraction} />
       </div>
     </section>

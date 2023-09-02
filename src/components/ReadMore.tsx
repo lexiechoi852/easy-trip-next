@@ -31,7 +31,7 @@ export default function ReadMore({ attraction }: ReadMoreProps) {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-end p-2">
-          <AddAttractionButton />
+          <AddAttractionButton attraction={attraction} />
           <button
             type="button"
             className="rounded-lg border p-2 text-gray-900 hover:bg-gray-100"

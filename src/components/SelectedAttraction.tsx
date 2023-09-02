@@ -2,6 +2,8 @@
 
 import React from "react";
 import { Attraction } from "@/types/attraction";
+import { useAppDispatch } from "@/store/hooks";
+import { removeAttraction } from "@/store/userSlice";
 
 interface SelectedAttractionProps {
   attraction: Attraction;
@@ -12,9 +14,7 @@ export default function SelectedAttraction({
   attraction,
   index,
 }: SelectedAttractionProps) {
-  const cancelSelectedAttraction = (attraction: Attraction) => {
-    console.log(`${attraction.name} clicked`);
-  };
+  const dispatch = useAppDispatch();
 
   return (
     <div className="relative m-2 flex rounded-lg border p-2">
@@ -40,7 +40,7 @@ export default function SelectedAttraction({
       <button
         type="button"
         className="ml-auto"
-        onClick={() => cancelSelectedAttraction(attraction)}
+        onClick={() => dispatch(removeAttraction(attraction))}
       >
         <svg
           className="h-5 w-5 text-gray-800 dark:text-white"
