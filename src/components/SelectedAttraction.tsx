@@ -3,7 +3,7 @@
 import React from "react";
 import { Attraction } from "@/types/attraction";
 import { useAppDispatch } from "@/store/hooks";
-import { removeAttraction } from "@/store/userSlice";
+import { removeAttraction } from "@/store/tripSlice";
 
 interface SelectedAttractionProps {
   attraction: Attraction;

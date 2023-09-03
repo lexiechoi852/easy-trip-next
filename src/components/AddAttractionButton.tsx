@@ -3,7 +3,7 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Attraction } from "@/types/attraction";
-import { addAttraction, removeAttraction } from "@/store/userSlice";
+import { addAttraction, removeAttraction } from "@/store/tripSlice";
 
 interface AddAttractionButtonProps {
   attraction: Attraction;
@@ -13,7 +13,7 @@ export default function AddAttractionButton({
   attraction,
 }: AddAttractionButtonProps) {
   const dispatch = useAppDispatch();
-  const { selectedAttractions } = useAppSelector((state) => state.user);
+  const { selectedAttractions } = useAppSelector((state) => state.trip);
 
   const checkSelectedAttraction = () => {
     if (

@@ -1,16 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
 import SelectedAttraction from "./SelectedAttraction";
 
 export default function SelectedContainer() {
-  const { selectedAttractions } = useAppSelector((state) => state.user);
-
-  useEffect(() => {
-    console.log(selectedAttractions, "selectedAttractions");
-  }, [selectedAttractions]);
+  const { selectedAttractions } = useAppSelector((state) => state.trip);
 
   return (
     <div className="mr-2 min-w-[260px] rounded-lg border shadow-lg">
