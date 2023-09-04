@@ -1,16 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { addDays, addHours } from "date-fns";
 import { Attraction } from "@/types/attraction";
-import { Trip } from "@/types/trip";
-import { DropInfo } from "@/types/calendar";
+import { CalendarEvent, ScheduleItem, Trip } from "@/types/trip";
 
 export interface TripState {
   selectedAttractions: Attraction[];
   trips: Trip[];
+  scheduleItems: ScheduleItem[];
+  calendarEvents: CalendarEvent[];
 }
 
 const initialState: TripState = {
   selectedAttractions: [],
   trips: [],
+  scheduleItems: [],
+  calendarEvents: [],
 };
 
 export const tripSlice = createSlice({
@@ -18,6 +22,12 @@ export const tripSlice = createSlice({
   initialState,
   reducers: {
     addAttraction: (state, action: PayloadAction<Attraction>) => {
+      const newScheduleItem = {
+        id: action.payload.id,
+        title: action.payload.name,
+        duration: "02:00",
+      };
+      state.scheduleItems = [...state.scheduleItems, newScheduleItem];
       state.selectedAttractions = [
         ...state.selectedAttractions,
         action.payload,
@@ -27,35 +37,44 @@ export const tripSlice = createSlice({
       state.selectedAttractions = state.selectedAttractions.filter(
         (attraction) => attraction.id !== action.payload.id,
       );
+      state.scheduleItems = state.scheduleItems.filter(
+        (scheduleItem) => scheduleItem.id !== action.payload.id,
+      );
     },
     addTrip: (state) => {
       const newTrip = {
         id: state.trips.length,
         name: `trip ${state.trips.length}`,
-        startDate: new Date(),
-        endDate: new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000),
+        startDate: new Date().toISOString(),
+        endDate: addDays(new Date(), 5).toISOString(),
         scheduleItems: [],
       };
       state.trips.push(newTrip);
     },
-    addAttractionToCalendar: (state, action: PayloadAction<DropInfo>) => {
-      const currentTrip = state.trips[0];
-      console.log(currentTrip, "currentTrip");
-      console.log(action.payload.date, "time");
-      //   const newScheduleItem = {
-      //     name: action.payload.name,
-      //     description: action.payload.description,
-      //     attraction: action.payload,
-      //     type: 'attraction',
-      //     startTime: action.payload.date
-      //     endTimeTime: Date;
-      //   };
-      //   currentTrip.scheduleItems
+    addAttractionToCalendar: (
+      state,
+      action: PayloadAction<{ title: string; date: string }>,
+    ) => {
+      const newEvent = {
+        title: action.payload.title,
+        start: action.payload.date,
+        end: addHours(new Date(action.payload.date), 2).toISOString(),
+        overlap: false,
+      };
+      state.calendarEvents = [...state.calendarEvents, newEvent];
+      state.trips[0].scheduleItems = [
+        ...state.trips[0].scheduleItems,
+        newEvent,
+      ];
     },
   },
 });
 
-export const { addAttraction, removeAttraction, addAttractionToCalendar } =
-  tripSlice.actions;
+export const {
+  addAttraction,
+  removeAttraction,
+  addTrip,
+  addAttractionToCalendar,
+} = tripSlice.actions;
 
 export default tripSlice.reducer;
