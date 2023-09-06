@@ -1,7 +1,7 @@
 import { Attraction } from "./attraction";
 
 export interface Trip {
-  id: number;
+  id: string;
   name: string;
   startDate: string;
   endDate: string;
@@ -25,6 +25,7 @@ export interface Event {
 }
 
 export interface CalendarEvent {
+  id: string;
   title: string;
   start: string;
   end: string;
