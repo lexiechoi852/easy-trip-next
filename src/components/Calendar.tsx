@@ -5,7 +5,11 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addAttractionToCalendar, addTrip } from "@/store/tripSlice";
+import {
+  addAttractionToCalendar,
+  addTrip,
+  editCalendarEvent,
+} from "@/store/tripSlice";
 
 export default function Calendar() {
   const dispatch = useAppDispatch();
@@ -19,8 +23,14 @@ export default function Calendar() {
 
   const calendarRef = useRef<FullCalendar>(null);
 
-  const handleEventDrop = (info: any) => {
-    console.log(info, "handleEventDrop info");
+  const handleEventDrop = (eventInfo: any) => {
+    console.log(eventInfo, "handleEventDrop info");
+    const newEventInfo = {
+      id: eventInfo.oldEvent.id,
+      start: eventInfo.event.start.toISOString(),
+      end: eventInfo.event.end.toISOString(),
+    };
+    dispatch(editCalendarEvent(newEventInfo));
   };
 
   const handleExternalEventDrop = (dropInfo: any) => {
