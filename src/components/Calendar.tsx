@@ -21,10 +21,14 @@ export default function Calendar() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(calendarEvents, "calendarEvents");
+  }, [calendarEvents]);
+
   const calendarRef = useRef<FullCalendar>(null);
 
-  const handleEventDrop = (eventInfo: any) => {
-    console.log(eventInfo, "handleEventDrop info");
+  const handleEventChange = (eventInfo: any) => {
+    console.log(eventInfo, "handleEventChange info");
     const newEventInfo = {
       id: eventInfo.oldEvent.id,
       start: eventInfo.event.start.toISOString(),
@@ -55,9 +59,10 @@ export default function Calendar() {
         initialView="timeGridWeek"
         allDaySlot={false}
         events={calendarEvents}
-        eventDrop={handleEventDrop}
+        eventDrop={handleEventChange}
         drop={handleExternalEventDrop}
         eventClick={handleEventClick}
+        eventResize={handleEventChange}
         editable
         droppable
       />
