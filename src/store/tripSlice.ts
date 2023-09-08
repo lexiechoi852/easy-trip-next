@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { addDays, addHours } from "date-fns";
 import { nanoid } from "nanoid";
+import dayjs from "dayjs";
 import { Attraction } from "@/types/attraction";
 import { CalendarEvent, ScheduleItem, Trip } from "@/types/trip";
 
@@ -47,7 +47,7 @@ export const tripSlice = createSlice({
         id: nanoid(),
         name: `trip ${state.trips.length}`,
         startDate: new Date().toISOString(),
-        endDate: addDays(new Date(), 5).toISOString(),
+        endDate: dayjs().add(5, "day").toISOString(),
         scheduleItems: [],
       };
       state.trips.push(newTrip);
@@ -60,7 +60,7 @@ export const tripSlice = createSlice({
         id: nanoid(),
         title: action.payload.title,
         start: action.payload.date,
-        end: addHours(new Date(action.payload.date), 2).toISOString(),
+        end: dayjs(new Date(action.payload.date)).add(2, "hour").toISOString(),
         overlap: false,
       };
       state.calendarEvents = [...state.calendarEvents, newEvent];
