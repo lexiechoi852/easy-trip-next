@@ -86,6 +86,14 @@ export const tripSlice = createSlice({
       state.calendarEvents = calendarEvents;
       state.trips[0].scheduleItems = calendarEvents;
     },
+    removeCalendarEvent: (state, action: PayloadAction<string>) => {
+      state.calendarEvents = state.calendarEvents.filter(
+        (event) => event.id !== action.payload,
+      );
+      state.trips[0].scheduleItems = state.trips[0].scheduleItems.filter(
+        (event) => event.id !== action.payload,
+      );
+    },
   },
 });
 
@@ -95,6 +103,7 @@ export const {
   addTrip,
   addAttractionToCalendar,
   editCalendarEvent,
+  removeCalendarEvent,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;
