@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import dayjs from "dayjs";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   addAttractionToCalendar,
@@ -18,7 +19,12 @@ export default function Calendar() {
 
   useEffect(() => {
     if (trips.length === 0) {
-      dispatch(addTrip());
+      const newTrip = {
+        city: "toronto",
+        startDate: new Date().toISOString(),
+        endDate: dayjs().add(5, "day").toISOString(),
+      };
+      dispatch(addTrip(newTrip));
     }
   }, []);
 

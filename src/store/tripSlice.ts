@@ -42,12 +42,21 @@ export const tripSlice = createSlice({
         (scheduleItem) => scheduleItem.id !== action.payload.id,
       );
     },
-    addTrip: (state) => {
+    addTrip: (
+      state,
+      action: PayloadAction<{
+        city: string;
+        startDate: string;
+        endDate: string;
+      }>,
+    ) => {
+      const randomId = nanoid();
       const newTrip = {
-        id: nanoid(),
-        name: `trip ${state.trips.length}`,
-        startDate: new Date().toISOString(),
-        endDate: dayjs().add(5, "day").toISOString(),
+        id: randomId,
+        name: `Trip ${randomId}`,
+        city: action.payload.city,
+        startDate: action.payload.startDate,
+        endDate: action.payload.endDate,
         scheduleItems: [],
       };
       state.trips.push(newTrip);
