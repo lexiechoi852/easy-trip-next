@@ -1,11 +1,12 @@
 import React from "react";
 import HeaderLink from "./HeaderLink";
+import LoginButton from "./LoginButton";
 
 export default function Header() {
   return (
     <header className="bg-white">
       <nav
-        className="mx-auto flex max-w-7xl items-center p-6"
+        className="mx-auto flex max-w-screen-2xl items-center p-6"
         aria-label="Global"
       >
         <div className="flex">
@@ -24,6 +25,7 @@ export default function Header() {
           <HeaderLink name="Attractions" href="/attractions" />
           <HeaderLink name="Calendar" href="/calendar" />
           <HeaderLink name="Schedule" href="/schedule" />
+          <LoginButton />
         </div>
       </nav>
     </header>
