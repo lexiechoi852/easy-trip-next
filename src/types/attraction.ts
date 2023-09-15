@@ -3,6 +3,8 @@ export interface Attraction {
   name: string;
   description: string;
   address: string;
+  latitude: number;
+  longitude: number;
   image: string;
   url: string;
   telephone: string;

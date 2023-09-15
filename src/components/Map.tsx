@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { useAppSelector } from "@/store/hooks";
 
 export default function Map() {
+  const { selectedAttractions } = useAppSelector((state) => state.trip);
+
   const libraries = useMemo(() => ["places"], []);
 
   const mapCenter = useMemo(() => ({ lat: 43.6532, lng: -79.3832 }), []);
@@ -17,7 +20,7 @@ export default function Map() {
     () => ({
       disableDefaultUI: true,
       clickableIcons: true,
-      scrollwheel: false,
+      scrollwheel: true,
     }),
     [],
   );
@@ -50,6 +53,22 @@ export default function Map() {
       center={mapCenter}
       mapTypeId={google.maps.MapTypeId.ROADMAP}
       mapContainerStyle={{ height: "300px" }}
-    />
+    >
+      {selectedAttractions.length > 0 &&
+        selectedAttractions.map((attraction, index) => (
+          <Marker
+            position={{ lat: attraction.latitude, lng: attraction.longitude }}
+            label={{
+              className: "font-bold",
+              color: "white",
+              text: (index + 1).toString(),
+            }}
+            icon={{
+              url: "/marker.svg",
+              scaledSize: new google.maps.Size(30, 40),
+            }}
+          />
+        ))}
+    </GoogleMap>
   );
 }
