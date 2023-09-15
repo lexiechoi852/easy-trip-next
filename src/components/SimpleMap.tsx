@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useAppSelector } from "@/store/hooks";
 
-export default function Map() {
+export default function SimpleMap() {
   const { selectedAttractions } = useAppSelector((state) => state.trip);
 
   const libraries = useMemo(() => ["places"], []);
