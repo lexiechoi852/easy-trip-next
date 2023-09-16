@@ -1,5 +1,3 @@
-import { Attraction } from "./attraction";
-
 export interface Trip {
   id: string;
   name: string;
@@ -15,19 +13,11 @@ export interface ScheduleItem {
   duration: string;
 }
 
-export interface Event {
-  id: number;
-  name: string;
-  description: string;
-  attraction: Attraction;
-  type: string;
-  startTime: string;
-  endTime: string;
-}
-
 export interface CalendarEvent {
   id: string;
   title: string;
+  description: string;
+  image: string;
   start: string;
   end: string;
   overlap: boolean;
