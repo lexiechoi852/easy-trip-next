@@ -98,6 +98,7 @@ export default function Calendar() {
         eventClick={handleEventClick}
         eventResize={handleEventChange}
         eventDragStop={handleEventDrag}
+        businessHours={{ daysOfWeek: [0, 1, 2, 3, 4, 5, 6] }}
         editable
         droppable
       />
