@@ -24,7 +24,7 @@ export default function Header() {
         <div className="ml-auto flex max-w-[300px] flex-1 justify-between">
           <HeaderLink name="Attractions" href="/attractions" />
           <HeaderLink name="Calendar" href="/calendar" />
-          <HeaderLink name="Schedule" href="/schedule" />
+          <HeaderLink name="Itinerary" href="/itinerary" />
           <LoginButton />
         </div>
       </nav>

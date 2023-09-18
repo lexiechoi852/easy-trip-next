@@ -65,9 +65,15 @@ export const tripSlice = createSlice({
       state,
       action: PayloadAction<{ title: string; date: string }>,
     ) => {
+      const attraction = state.selectedAttractions.filter(
+        (attraction) => attraction.name === action.payload.title,
+      );
+
       const newEvent = {
         id: nanoid(),
         title: action.payload.title,
+        description: attraction[0].description,
+        image: attraction[0].image,
         start: action.payload.date,
         end: dayjs(new Date(action.payload.date)).add(2, "hour").toISOString(),
         overlap: false,
