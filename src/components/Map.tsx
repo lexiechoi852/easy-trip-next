@@ -58,6 +58,7 @@ export default function Map() {
         {selectedAttractions.length > 0 &&
           selectedAttractions.map((attraction, index) => (
             <Marker
+              key={attraction.id}
               position={{ lat: attraction.latitude, lng: attraction.longitude }}
               label={{
                 className: "font-bold",
