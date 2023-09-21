@@ -22,7 +22,9 @@ export default function ScheduleItemContainer() {
     createDraggleItems();
   }, []);
 
-  const { selectedAttractions } = useAppSelector((state) => state.trip);
+  const { selectedAttractions, calendarEvents } = useAppSelector(
+    (state) => state.trip,
+  );
 
   return (
     <div
@@ -39,21 +41,43 @@ export default function ScheduleItemContainer() {
           ))}
         </div>
       ) : (
-        <Link
-          href="/attractions"
-          className="m-2 flex rounded-lg bg-sky-700 p-2 font-bold hover:bg-sky-500"
-        >
-          <svg
-            className="mr-2 h-6 w-6 text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 18 20"
-          >
-            <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
-          </svg>
-          <div className="text-white">Find Attractions you want to visit</div>
-        </Link>
+        <div>
+          {calendarEvents && calendarEvents.length > 0 ? (
+            <Link
+              href="/itinerary"
+              className="m-2 flex rounded-lg bg-sky-700 p-2 font-bold hover:bg-sky-500"
+            >
+              <svg
+                className="mr-2 h-6 w-6 text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 18 20"
+              >
+                <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
+              </svg>
+              <div className="text-white">Check out the itinerary</div>
+            </Link>
+          ) : (
+            <Link
+              href="/attractions"
+              className="m-2 flex rounded-lg bg-sky-700 p-2 font-bold hover:bg-sky-500"
+            >
+              <svg
+                className="mr-2 h-6 w-6 text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 18 20"
+              >
+                <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
+              </svg>
+              <div className="text-white">
+                Find Attractions you want to visit
+              </div>
+            </Link>
+          )}
+        </div>
       )}
     </div>
   );
