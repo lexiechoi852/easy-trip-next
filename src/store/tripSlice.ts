@@ -9,6 +9,7 @@ export interface TripState {
   trips: Trip[];
   scheduleItems: ScheduleItem[];
   calendarEvents: CalendarEvent[];
+  sortedTripEvents: CalendarEvent[];
 }
 
 const initialState: TripState = {
@@ -16,6 +17,7 @@ const initialState: TripState = {
   trips: [],
   scheduleItems: [],
   calendarEvents: [],
+  sortedTripEvents: [],
 };
 
 export const tripSlice = createSlice({
@@ -69,6 +71,10 @@ export const tripSlice = createSlice({
         (attraction) => attraction.name === action.payload.title,
       );
 
+      state.selectedAttractions = state.selectedAttractions.filter(
+        (attraction) => attraction.name !== action.payload.title,
+      );
+
       const newEvent = {
         id: nanoid(),
         title: action.payload.title,
@@ -109,6 +115,11 @@ export const tripSlice = createSlice({
         (event) => event.id !== action.payload,
       );
     },
+    sortTripEvents: (state) => {
+      state.sortedTripEvents = state.calendarEvents.sort((a, b) => {
+        return (new Date(a.start) as any) - (new Date(b.start) as any);
+      });
+    },
   },
 });
 
@@ -119,6 +130,7 @@ export const {
   addAttractionToCalendar,
   editCalendarEvent,
   removeCalendarEvent,
+  sortTripEvents,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;
