@@ -13,7 +13,7 @@ export default function TripList() {
 
   useEffect(() => {
     dispatch(sortTripEvents());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col">

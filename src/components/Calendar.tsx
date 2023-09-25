@@ -26,7 +26,7 @@ export default function Calendar() {
       };
       dispatch(addTrip(newTrip));
     }
-  }, []);
+  }, [dispatch, trips.length]);
 
   useEffect(() => {
     console.log(calendarEvents, "calendarEvents");
