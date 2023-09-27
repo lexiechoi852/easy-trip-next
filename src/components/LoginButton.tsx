@@ -1,12 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useAppDispatch } from "@/store/hooks";
+import { logout, setUser } from "@/store/userSlice";
 
 export default function LoginButton() {
-  const { data: session } = useSession();
+  const dispatch = useAppDispatch();
 
-  console.log(session, "session");
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session && session.user) {
+      dispatch(setUser(session.user));
+    }
+    if (!session) {
+      dispatch(logout());
+    }
+  }, [session, dispatch]);
 
   if (session && session.user) {
     return (
