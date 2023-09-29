@@ -46,15 +46,11 @@ export default function LoginButton() {
     signInWithPopup(auth, provider);
   };
 
-  const handleSignOut = () => {
-    signOut(auth);
-  };
-
-  if (user) {
+  if (user && !user.isAnonymous) {
     return (
       <button
         type="button"
-        onClick={handleSignOut}
+        onClick={() => signOut(auth)}
         className="text-sm font-semibold leading-6 text-gray-900 hover:font-bold hover:underline"
       >
         Log out
