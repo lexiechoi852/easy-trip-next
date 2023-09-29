@@ -1,8 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import { auth } from "@/firebase/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout, setUser } from "@/store/userSlice";
 import SignInModal from "./SignInModal";
@@ -11,31 +17,44 @@ export default function LoginButton() {
   const dispatch = useAppDispatch();
 
   const pathname = usePathname();
-  const { data: session } = useSession();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    if (session && session.user) {
-      dispatch(setUser(session.user));
-    }
-    if (!session) {
-      dispatch(logout());
-    }
-  }, [session, dispatch]);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const currentUser = {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          isAnonymous: user.isAnonymous,
+        };
+        dispatch(setUser(currentUser));
+      } else {
+        dispatch(logout());
+        if (pathname === "/attractions") {
+          setIsModalOpen(true);
+        }
+      }
+    });
+  }, [dispatch, pathname]);
 
-  useEffect(() => {
-    if (!user && pathname === "/attractions") {
-      setIsModalOpen(true);
-    }
-  }, [user, pathname]);
+  const handleSignIn = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider);
+  };
 
-  if (session && session.user) {
+  const handleSignOut = () => {
+    signOut(auth);
+  };
+
+  if (user) {
     return (
       <button
         type="button"
-        onClick={() => signOut()}
+        onClick={handleSignOut}
         className="text-sm font-semibold leading-6 text-gray-900 hover:font-bold hover:underline"
       >
         Log out
@@ -47,7 +66,7 @@ export default function LoginButton() {
     <>
       <button
         type="button"
-        onClick={() => signIn()}
+        onClick={handleSignIn}
         className="text-sm font-semibold leading-6 text-gray-900 hover:font-bold hover:underline"
       >
         Log in

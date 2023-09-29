@@ -1,5 +1,7 @@
 export interface User {
-  name: string;
+  uid: string;
+  displayName: string;
   email: string;
-  image: string;
+  photoURL: string;
+  isAnonymous: boolean;
 }
