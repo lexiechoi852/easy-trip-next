@@ -21,4 +21,6 @@ export interface CalendarEvent {
   start: string;
   end: string;
   overlap: boolean;
+  latitude: number;
+  longitude: number;
 }

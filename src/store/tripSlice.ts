@@ -82,6 +82,8 @@ export const tripSlice = createSlice({
         image: attraction[0].image,
         start: action.payload.date,
         end: dayjs(new Date(action.payload.date)).add(2, "hour").toISOString(),
+        latitude: attraction[0].latitude,
+        longitude: attraction[0].longitude,
         overlap: false,
       };
       state.calendarEvents = [...state.calendarEvents, newEvent];

@@ -5,7 +5,7 @@ import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useAppSelector } from "@/store/hooks";
 
 export default function Map() {
-  const { selectedAttractions } = useAppSelector((state) => state.trip);
+  const { sortedTripEvents } = useAppSelector((state) => state.trip);
 
   const libraries = useMemo(() => ["places"], []);
 
@@ -55,11 +55,11 @@ export default function Map() {
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ height: "100%" }}
       >
-        {selectedAttractions.length > 0 &&
-          selectedAttractions.map((attraction, index) => (
+        {sortedTripEvents.length > 0 &&
+          sortedTripEvents.map((tripEvent, index) => (
             <Marker
-              key={attraction.id}
-              position={{ lat: attraction.latitude, lng: attraction.longitude }}
+              key={tripEvent.id}
+              position={{ lat: tripEvent.latitude, lng: tripEvent.longitude }}
               label={{
                 className: "font-bold",
                 color: "white",
