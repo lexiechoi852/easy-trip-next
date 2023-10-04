@@ -5,6 +5,7 @@ const attractions = [
     description:
       "The Royal Ontario Museum is a museum of art, world culture and natural history in Toronto, Ontario, Canada. It is one of the largest museums in North America and the largest in Canada. It attracts more than one million visitors every year, making the ROM the most-visited museum in Canada. The museum is north of Queen's Park, in the University of Toronto district, with its main entrance on Bloor Street West. Museum subway station is named after the ROM and, since a 2008 renovation, is decorated to resemble the institution's collection at the platform level. Established on April 16, 1912, and opened on March 19, 1914, the museum has maintained close relations with the University of Toronto throughout its history, often sharing expertise and resources. The museum was under the direct control and management of the University of Toronto until 1968, when it became an independent Crown agency of the Government of Ontario. Today, the museum is Canada's largest field-research institution, with research and conservation activities around the world",
     address: "100 Queen's Park",
+    placeId: "ChIJE-Xa87o0K4gRkvXFHuE0hMk",
     latitude: 43.66771,
     longitude: -79.394777,
     image:
@@ -56,6 +57,7 @@ const attractions = [
     description:
       "The CN Tower is a 553.3 m-high concrete communications and observation tower in downtown Toronto, Ontario, Canada. Built on the former Railway Lands, it was completed in 1976. Its name \"CN\" referred to Canadian National, the railway company that built the tower. Following the railway's decision to divest non-core freight railway assets prior to the company's privatization in 1995, it transferred the tower to the Canada Lands Company, a federal Crown corporation responsible for real estate development. The CN Tower held the record for the world's tallest free-standing structure for 32 years, from 1975 until 2007, when it was surpassed by the Burj Khalifa, and was the world's tallest tower until 2009 when it was surpassed by the Canton Tower. It is currently the tenth-tallest free-standing structure in the world and remains the tallest free-standing structure on land in the Western Hemisphere. In 1995, the CN Tower was declared one of the modern Seven Wonders of the World by the American Society of Civil Engineers. It also belongs to the World Federation of Great Towers. It is a signature icon of Toronto's skyline and attracts more than two million international visitors annually.",
     address: "290 Bremner Boulevard",
+    placeId: "ChIJmzrzi9Y0K4gRgXUc3sTY7RU",
     latitude: 43.642566,
     longitude: -79.387057,
     image:
@@ -107,6 +109,7 @@ const attractions = [
     description:
       "The St. Lawrence Market South building is a major public market building in Toronto, Ontario, Canada. It is located on the southwest corner of Front and Lower Jarvis Streets. Along with the St. Lawrence Market North and St. Lawrence Hall, it comprises the St. Lawrence Market complex. The current building was opened in 1902, incorporating the 1845 Toronto City Hall building into the structure. The building was restored during the 1970s.",
     address: "92 Front Street East",
+    placeId: "ChIJWyfdtDHL1IkR_bal8ay1Cso",
     latitude: 43.648688,
     longitude: -79.371545,
     image:
@@ -158,6 +161,7 @@ const attractions = [
     description:
       "Casa Loma is a Gothic Revival castle-style mansion and garden in midtown Toronto, Ontario, Canada, that is now a historic house museum and landmark. It was constructed from 1911 to 1914 as a residence for financier Sir Henry Pellatt. The architect was E. J. Lennox, who designed several other city landmarks.",
     address: "1 Austin Terrace",
+    placeId: "ChIJs6Elz500K4gRT1jWAsHIfGE",
     latitude: 43.678037,
     longitude: -79.409444,
     image:
@@ -209,6 +213,7 @@ const attractions = [
     description:
       "The Art Gallery of Ontario is an art museum in Toronto, Ontario, Canada. The museum is located in the Grange Park neighbourhood of downtown Toronto, on Dundas Street West between McCaul and Beverley streets just east of Chinatown and just west of Little Japan.",
     address: "317 Dundas St W",
+    placeId: "ChIJvRlT7cU0K4gRr0bg7VV3J9o",
     latitude: 43.653607,
     longitude: -79.392512,
     image:
@@ -260,6 +265,7 @@ const attractions = [
     description:
       "Ripley's Aquarium of Canada is a public aquarium in Toronto, Ontario, Canada. The aquarium is one of three aquariums owned-and-operated by Ripley Entertainment. It is located in downtown Toronto, just southeast of the CN Tower.",
     address: "288 Bremner Blvd",
+    placeId: "ChIJWwS21dU0K4gRPSGMKRkar40",
     latitude: 43.642179,
     longitude: -79.386602,
     image:

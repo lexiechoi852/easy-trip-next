@@ -3,6 +3,7 @@ export interface Attraction {
   name: string;
   description: string;
   address: string;
+  placeId: string;
   latitude: number;
   longitude: number;
   image: string;
