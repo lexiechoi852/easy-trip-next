@@ -32,28 +32,8 @@ export default function SignInModal({
         <h5 className="text-lg font-bold text-gray-600">
           Sign in to save your trip
         </h5>
-        <button
-          type="button"
-          className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-900"
-        >
-          <svg
-            className="h-3 w-3 font-bold text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
-        </button>
       </div>
-      <Modal.Body className="flex max-w-2xl flex-col px-4 py-0">
+      <Modal.Body className="mt-2 flex max-w-2xl flex-col px-4 py-0">
         <button
           type="button"
           className="flex w-full items-center justify-center rounded-lg border p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
