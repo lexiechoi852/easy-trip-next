@@ -10,7 +10,7 @@ interface TripItemProps {
 
 export default function TripItem({ calendarEvent, index }: TripItemProps) {
   return (
-    <div className="mb-3 flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100 md:flex-row">
+    <div className="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100 md:flex-row">
       <Image
         className="h-96 w-full rounded-lg object-cover md:h-auto md:w-48"
         src={calendarEvent.image}

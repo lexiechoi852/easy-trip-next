@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import dayjs from "dayjs";
 import { Attraction } from "@/types/attraction";
 import { CalendarEvent, ScheduleItem, Trip } from "@/types/trip";
+import getDirection from "./tripThunk";
 
 export interface TripState {
   selectedAttractions: Attraction[];
@@ -10,6 +11,10 @@ export interface TripState {
   scheduleItems: ScheduleItem[];
   calendarEvents: CalendarEvent[];
   sortedTripEvents: CalendarEvent[];
+  tripDirections: google.maps.DirectionsResult[];
+  isLoading: boolean;
+  isError: boolean;
+  errorMessage: string;
 }
 
 const initialState: TripState = {
@@ -18,6 +23,10 @@ const initialState: TripState = {
   scheduleItems: [],
   calendarEvents: [],
   sortedTripEvents: [],
+  tripDirections: [],
+  isLoading: false,
+  isError: false,
+  errorMessage: "",
 };
 
 export const tripSlice = createSlice({
@@ -122,6 +131,26 @@ export const tripSlice = createSlice({
         return (new Date(a.start) as any) - (new Date(b.start) as any);
       });
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getDirection.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getDirection.fulfilled,
+        (state, action: PayloadAction<google.maps.DirectionsResult>) => {
+          state.tripDirections = [...state.tripDirections, action.payload];
+        },
+      )
+      .addCase(getDirection.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      });
   },
 });
 
