@@ -7,6 +7,14 @@ export const store = configureStore({
     trip: tripReducer,
     user: userReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["trip/getDirection"],
+        ignoredPaths: [/trip.tripDirections/g],
+        ignoredActionPaths: [/payload.routes/g, /payload.request/g],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

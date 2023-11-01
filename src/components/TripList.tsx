@@ -1,34 +1,104 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { format, isSameDay } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { sortTripEvents } from "@/store/tripSlice";
+import { CalendarEvent } from "@/types/trip";
+import getDirection from "@/store/tripThunk";
 import TripItem from "./TripItem";
+import CarIcon from "./icons/CarIcon";
 
 export default function TripList() {
+  const [sortedTripEvents, setSortedTripEvents] = useState<CalendarEvent[]>([]);
   const dispatch = useAppDispatch();
 
-  const { sortedTripEvents } = useAppSelector((state) => state.trip);
+  const { calendarEvents, tripDirections } = useAppSelector(
+    (state) => state.trip,
+  );
 
   useEffect(() => {
     dispatch(sortTripEvents());
   }, [dispatch]);
+
+  useEffect(() => {
+    const events = [...calendarEvents];
+    const sorted = events.sort((a, b) => {
+      return (new Date(a.start) as any) - (new Date(b.start) as any);
+    });
+
+    setSortedTripEvents(sorted);
+
+    for (let i = 1; i < sorted.length; i++) {
+      const previousIndex = i - 1;
+      const previousEvent = sorted[previousIndex];
+
+      const directionInfo = {
+        origin: `${previousEvent.latitude},${previousEvent.longitude}`,
+        destination: `${sorted[i].latitude},${sorted[i].longitude}`,
+        mode: google.maps.TravelMode.DRIVING,
+      };
+      dispatch(getDirection(directionInfo));
+    }
+  }, [calendarEvents, dispatch]);
+
+  const renderDate = (sortedTripEvent: CalendarEvent, index: number) => {
+    const previousIndex = index === 0 ? index : index - 1;
+    const sameDay = isSameDay(
+      new Date(sortedTripEvent.start),
+      new Date(sortedTripEvents[previousIndex].start),
+    );
+    if (!sameDay || index === 0) {
+      return (
+        <div className="flex justify-center">
+          <div className="mr-2 rounded-full bg-gray-100 px-4 py-2  text-sm font-medium text-gray-800">
+            {format(new Date(sortedTripEvent.start), "PPPP")}
+          </div>
+        </div>
+      );
+    }
+    return <div />;
+  };
+
+  const renderTravelTime = (index: number) => {
+    if (index === 0) return <div />;
+    if (tripDirections.length > 0) {
+      console.log(
+        tripDirections[index - 1]?.routes[0],
+        "tripDirections routes",
+      );
+    }
+
+    return (
+      <div className="relative flex items-center justify-center">
+        <button type="button" className="flex items-center justify-center">
+          <CarIcon />
+          <div className="mx-2 font-semibold text-gray-500">
+            {tripDirections[index - 1]?.routes[0]?.legs[0]?.duration?.text}
+          </div>
+        </button>
+        <div className="absolute">
+          <ul />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col">
       {sortedTripEvents.length > 0 ? (
         <>
           {sortedTripEvents.map((calendarEvent, index) => (
-            <TripItem
-              key={calendarEvent.id}
-              calendarEvent={calendarEvent}
-              index={index}
-            />
+            <div className="flex flex-col gap-2" key={calendarEvent.id}>
+              {renderDate(calendarEvent, index)}
+              {renderTravelTime(index)}
+              <TripItem calendarEvent={calendarEvent} index={index} />
+            </div>
           ))}
         </>
       ) : (
-        <div className="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100">
+        <div className="flex w-full flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100">
           <div>There is nothing in the trip</div>
           <div className="flex">
             <Link
