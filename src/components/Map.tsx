@@ -1,11 +1,16 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  useLoadScript,
+  DirectionsRenderer,
+  Marker,
+} from "@react-google-maps/api";
 import { useAppSelector } from "@/store/hooks";
 
 export default function Map() {
-  const { sortedTripEvents } = useAppSelector((state) => state.trip);
+  const { tripDirections } = useAppSelector((state) => state.trip);
 
   const libraries = useMemo(() => ["places"], []);
 
@@ -55,21 +60,38 @@ export default function Map() {
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ height: "100%" }}
       >
-        {sortedTripEvents.length > 0 &&
-          sortedTripEvents.map((tripEvent, index) => (
-            <Marker
-              key={tripEvent.id}
-              position={{ lat: tripEvent.latitude, lng: tripEvent.longitude }}
-              label={{
-                className: "font-bold",
-                color: "white",
-                text: (index + 1).toString(),
-              }}
-              icon={{
-                url: "/marker.svg",
-                scaledSize: new google.maps.Size(30, 40),
-              }}
-            />
+        {tripDirections.length > 0 &&
+          tripDirections.map((direction, index) => (
+            <div key={direction?.routes[index]?.summary}>
+              <DirectionsRenderer
+                directions={direction}
+                options={{ suppressMarkers: true }}
+              />
+              <Marker
+                position={direction.routes[0].legs[0].start_location}
+                label={{
+                  className: "font-bold",
+                  color: "white",
+                  text: (index + 1).toString(),
+                }}
+                icon={{
+                  url: "/marker.svg",
+                  scaledSize: new google.maps.Size(30, 40),
+                }}
+              />
+              <Marker
+                position={direction.routes[0].legs[0].end_location}
+                label={{
+                  className: "font-bold",
+                  color: "white",
+                  text: (index + 2).toString(),
+                }}
+                icon={{
+                  url: "/marker.svg",
+                  scaledSize: new google.maps.Size(30, 40),
+                }}
+              />
+            </div>
           ))}
       </GoogleMap>
     </div>
