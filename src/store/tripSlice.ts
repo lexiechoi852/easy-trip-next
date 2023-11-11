@@ -37,7 +37,6 @@ export const tripSlice = createSlice({
       const newScheduleItem = {
         id: action.payload.id,
         title: action.payload.name,
-        duration: "02:00",
       };
       state.scheduleItems = [...state.scheduleItems, newScheduleItem];
       state.selectedAttractions = [
@@ -141,6 +140,7 @@ export const tripSlice = createSlice({
         getDirection.fulfilled,
         (state, action: PayloadAction<google.maps.DirectionsResult>) => {
           state.tripDirections = [...state.tripDirections, action.payload];
+          state.isLoading = false;
         },
       )
       .addCase(getDirection.rejected, (state, action) => {

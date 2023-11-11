@@ -10,7 +10,6 @@ export interface Trip {
 export interface ScheduleItem {
   id: number;
   title: string;
-  duration: string;
 }
 
 export interface CalendarEvent {
