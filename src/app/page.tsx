@@ -10,9 +10,9 @@ export default function Home() {
   return (
     <div className="container mx-auto flex flex-wrap items-center px-5 py-36">
       <div className="pr-0 md:w-1/2 md:pr-16 lg:w-3/5 lg:pr-0">
-        <h1 className="text-4xl font-medium text-gray-900">
+        <h2 className="text-4xl font-medium text-gray-900">
           The new way to plan your next trip
-        </h1>
+        </h2>
         <p className="mt-4 leading-relaxed">
           Create a fully customized day-by-day itinerary for free
         </p>
