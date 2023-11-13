@@ -91,6 +91,7 @@ export default function Calendar() {
         ref={calendarRef}
         eventDurationEditable
         initialView="timeGridWeek"
+        initialDate={trips.length > 0 ? trips[0].startDate : new Date()}
         allDaySlot={false}
         events={calendarEvents}
         eventDrop={handleEventChange}
