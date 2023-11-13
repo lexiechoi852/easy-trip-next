@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { format, isSameDay } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -11,10 +11,9 @@ import TripItem from "./TripItem";
 import CarIcon from "./icons/CarIcon";
 
 export default function TripList() {
-  const [sortedTripEvents, setSortedTripEvents] = useState<CalendarEvent[]>([]);
   const dispatch = useAppDispatch();
 
-  const { calendarEvents, tripDirections } = useAppSelector(
+  const { sortedTripEvents, tripDirections } = useAppSelector(
     (state) => state.trip,
   );
 
@@ -23,25 +22,18 @@ export default function TripList() {
   }, [dispatch]);
 
   useEffect(() => {
-    const events = [...calendarEvents];
-    const sorted = events.sort((a, b) => {
-      return (new Date(a.start) as any) - (new Date(b.start) as any);
-    });
-
-    setSortedTripEvents(sorted);
-
-    for (let i = 1; i < sorted.length; i++) {
+    for (let i = 1; i < sortedTripEvents.length; i++) {
       const previousIndex = i - 1;
-      const previousEvent = sorted[previousIndex];
+      const previousEvent = sortedTripEvents[previousIndex];
 
       const directionInfo = {
         origin: `${previousEvent.latitude},${previousEvent.longitude}`,
-        destination: `${sorted[i].latitude},${sorted[i].longitude}`,
+        destination: `${sortedTripEvents[i].latitude},${sortedTripEvents[i].longitude}`,
         mode: google.maps.TravelMode.DRIVING,
       };
       dispatch(getDirection(directionInfo));
     }
-  }, [calendarEvents, dispatch]);
+  }, [sortedTripEvents, dispatch]);
 
   const renderDate = (sortedTripEvent: CalendarEvent, index: number) => {
     const previousIndex = index === 0 ? index : index - 1;
@@ -63,12 +55,6 @@ export default function TripList() {
 
   const renderTravelTime = (index: number) => {
     if (index === 0) return <div />;
-    if (tripDirections.length > 0) {
-      console.log(
-        tripDirections[index - 1]?.routes[0],
-        "tripDirections routes",
-      );
-    }
 
     return (
       <div className="relative flex items-center justify-center">
