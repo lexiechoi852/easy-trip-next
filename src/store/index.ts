@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import attractionReducer from "./attractionSlice";
 import tripReducer from "./tripSlice";
 import userReducer from "./userSlice";
 
 export const store = configureStore({
   reducer: {
+    attraction: attractionReducer,
     trip: tripReducer,
     user: userReducer,
   },
