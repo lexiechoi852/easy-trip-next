@@ -23,7 +23,7 @@ export default function ScheduleItemContainer() {
     createDraggleItems();
   }, []);
 
-  const { selectedAttractions, calendarEvents } = useAppSelector(
+  const { scheduleItems, calendarEvents } = useAppSelector(
     (state) => state.trip,
   );
 
@@ -35,10 +35,10 @@ export default function ScheduleItemContainer() {
       <div className="text-center text-lg font-semibold text-gray-800">
         Unplanned Attractions
       </div>
-      {selectedAttractions && selectedAttractions.length > 0 ? (
+      {scheduleItems && scheduleItems.length > 0 ? (
         <div>
-          {selectedAttractions.map((attraction) => (
-            <ScheduleItem key={attraction.id} attraction={attraction} />
+          {scheduleItems.map((scheduleItem) => (
+            <ScheduleItem key={scheduleItem.id} attraction={scheduleItem} />
           ))}
         </div>
       ) : (
