@@ -4,13 +4,16 @@ import React from "react";
 import { Formik } from "formik";
 import { object, date, string } from "yup";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/store/hooks";
-import { addTrip } from "@/store/tripSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { createTrip } from "@/store/tripThunk";
+import convertDate from "@/utils/dateUtils";
 import DatePicker from "./DatePicker";
 
 export default function CreateTripForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { user } = useAppSelector((state) => state.user);
 
   const validationSchema = object({
     city: string().required(),
@@ -22,17 +25,19 @@ export default function CreateTripForm() {
     <Formik
       initialValues={{
         city: "toronto",
-        startDate: null,
-        endDate: null,
+        startDate: "",
+        endDate: "",
       }}
       validationSchema={validationSchema}
       onSubmit={(formData, { setSubmitting }) => {
         const newTrip = {
+          name: `Trip to ${formData.city}`,
           city: formData.city,
-          startDate: formData.startDate!,
-          endDate: formData.endDate!,
+          startDate: convertDate(formData.startDate),
+          endDate: convertDate(formData.endDate),
+          userId: user!.id,
         };
-        dispatch(addTrip(newTrip));
+        dispatch(createTrip(newTrip));
         setSubmitting(false);
         router.push("/attractions");
       }}

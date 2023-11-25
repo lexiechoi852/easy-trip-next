@@ -1,13 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
-import dayjs from "dayjs";
-import { Attraction } from "@/types/attraction";
-import { CalendarEvent, ScheduleItem, Trip } from "@/types/trip";
-import getDirection from "./tripThunk";
+import { CalendarEvent, ScheduleItem, Trip, TripItem } from "@/types/trip";
+import {
+  addScheduleItem,
+  addTripItem,
+  createTrip,
+  getAllScheduleItems,
+  getAllTrips,
+  getDirection,
+  removeScheduleItem,
+} from "./tripThunk";
 
 export interface TripState {
-  selectedAttractions: Attraction[];
   trips: Trip[];
+  currentTrip: Trip | null;
   scheduleItems: ScheduleItem[];
   calendarEvents: CalendarEvent[];
   sortedTripEvents: CalendarEvent[];
@@ -18,8 +23,8 @@ export interface TripState {
 }
 
 const initialState: TripState = {
-  selectedAttractions: [],
   trips: [],
+  currentTrip: null,
   scheduleItems: [],
   calendarEvents: [],
   sortedTripEvents: [],
@@ -33,72 +38,8 @@ export const tripSlice = createSlice({
   name: "trip",
   initialState,
   reducers: {
-    addAttraction: (state, action: PayloadAction<Attraction>) => {
-      const newScheduleItem = {
-        id: action.payload.id,
-        title: action.payload.name,
-      };
-      state.scheduleItems = [...state.scheduleItems, newScheduleItem];
-      state.selectedAttractions = [
-        ...state.selectedAttractions,
-        action.payload,
-      ];
-    },
-    removeAttraction: (state, action: PayloadAction<Attraction>) => {
-      state.selectedAttractions = state.selectedAttractions.filter(
-        (attraction) => attraction.id !== action.payload.id,
-      );
-      state.scheduleItems = state.scheduleItems.filter(
-        (scheduleItem) => scheduleItem.id !== action.payload.id,
-      );
-    },
-    addTrip: (
-      state,
-      action: PayloadAction<{
-        city: string;
-        startDate: string;
-        endDate: string;
-      }>,
-    ) => {
-      const randomId = nanoid();
-      const newTrip = {
-        id: randomId,
-        name: `Trip ${randomId}`,
-        city: action.payload.city,
-        startDate: action.payload.startDate,
-        endDate: action.payload.endDate,
-        scheduleItems: [],
-      };
-      state.trips.push(newTrip);
-    },
-    addAttractionToCalendar: (
-      state,
-      action: PayloadAction<{ title: string; date: string }>,
-    ) => {
-      const attraction = state.selectedAttractions.filter(
-        (attraction) => attraction.name === action.payload.title,
-      );
-
-      state.selectedAttractions = state.selectedAttractions.filter(
-        (attraction) => attraction.name !== action.payload.title,
-      );
-
-      const newEvent = {
-        id: nanoid(),
-        title: action.payload.title,
-        description: attraction[0].description,
-        image: attraction[0].image,
-        start: action.payload.date,
-        end: dayjs(new Date(action.payload.date)).add(2, "hour").toISOString(),
-        latitude: attraction[0].latitude,
-        longitude: attraction[0].longitude,
-        overlap: false,
-      };
-      state.calendarEvents = [...state.calendarEvents, newEvent];
-      state.trips[0].scheduleItems = [
-        ...state.trips[0].scheduleItems,
-        newEvent,
-      ];
+    setCurrentTrip: (state, action: PayloadAction<Trip>) => {
+      state.currentTrip = action.payload;
     },
     editCalendarEvent: (
       state,
@@ -115,13 +56,9 @@ export const tripSlice = createSlice({
         return event;
       });
       state.calendarEvents = calendarEvents;
-      state.trips[0].scheduleItems = calendarEvents;
     },
     removeCalendarEvent: (state, action: PayloadAction<string>) => {
       state.calendarEvents = state.calendarEvents.filter(
-        (event) => event.id !== action.payload,
-      );
-      state.trips[0].scheduleItems = state.trips[0].scheduleItems.filter(
         (event) => event.id !== action.payload,
       );
     },
@@ -133,6 +70,130 @@ export const tripSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createTrip.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createTrip.fulfilled, (state, action: PayloadAction<Trip>) => {
+        state.trips = [...state.trips, action.payload];
+        state.currentTrip = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(createTrip.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(getAllTrips.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getAllTrips.fulfilled,
+        (state, action: PayloadAction<Trip[]>) => {
+          state.trips = action.payload;
+          state.trips = state.trips.sort((a, b) => {
+            return (
+              (new Date(a.startDate) as any) - (new Date(b.startDate) as any)
+            );
+          });
+          state.isLoading = false;
+        },
+      )
+      .addCase(getAllTrips.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(getAllScheduleItems.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getAllScheduleItems.fulfilled,
+        (state, action: PayloadAction<ScheduleItem[]>) => {
+          state.scheduleItems = action.payload;
+          state.isLoading = false;
+        },
+      )
+      .addCase(getAllScheduleItems.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(addScheduleItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        addScheduleItem.fulfilled,
+        (state, action: PayloadAction<ScheduleItem>) => {
+          state.scheduleItems = [...state.scheduleItems, action.payload];
+          state.isLoading = false;
+        },
+      )
+      .addCase(addScheduleItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(removeScheduleItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        removeScheduleItem.fulfilled,
+        (state, action: PayloadAction<ScheduleItem>) => {
+          state.scheduleItems = state.scheduleItems.filter(
+            (scheduleItem) => action.payload.id !== scheduleItem.id,
+          );
+          state.isLoading = false;
+        },
+      )
+      .addCase(removeScheduleItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(addTripItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        addTripItem.fulfilled,
+        (state, action: PayloadAction<TripItem>) => {
+          const newEvent = {
+            id: action.payload.id.toString(),
+            title: action.payload.attraction.name,
+            description: action.payload.attraction.description,
+            image: action.payload.attraction.image,
+            start: action.payload.start,
+            end: action.payload.end,
+            latitude: action.payload.attraction.latitude,
+            longitude: action.payload.attraction.longitude,
+            overlap: false,
+          };
+          state.calendarEvents = [...state.calendarEvents, newEvent];
+          state.isLoading = false;
+        },
+      )
+      .addCase(addTripItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
       .addCase(getDirection.pending, (state) => {
         state.isLoading = true;
       })
@@ -155,10 +216,7 @@ export const tripSlice = createSlice({
 });
 
 export const {
-  addAttraction,
-  removeAttraction,
-  addTrip,
-  addAttractionToCalendar,
+  setCurrentTrip,
   editCalendarEvent,
   removeCalendarEvent,
   sortTripEvents,
