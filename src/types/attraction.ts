@@ -14,7 +14,7 @@ export interface Attraction {
   city: string;
   openingHours: {
     dayOfWeek: number;
-    openTime: string | null;
-    closeTime: string | null;
+    openingHour: string | null;
+    closingHour: string | null;
   }[];
 }

@@ -22,6 +22,18 @@ const dayOfWeek = [
 export default function ReadMore({ attraction }: ReadMoreProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const convertTime = (time: string | null) => {
+    if (time) {
+      const timeArray = time.split(":");
+
+      timeArray.pop();
+
+      return timeArray.join(":");
+    }
+
+    return null;
+  };
+
   return (
     <>
       <button
@@ -60,13 +72,13 @@ export default function ReadMore({ attraction }: ReadMoreProps) {
                         {dayOfWeek[index]}
                       </td>
                       <td className="text-gray-500">
-                        <span>{time.openTime}</span>
-                        {time.openTime && time.closeTime ? (
+                        <span>{convertTime(time.openingHour)}</span>
+                        {time.openingHour && time.closingHour ? (
                           <span>-</span>
                         ) : (
                           <span>Closed</span>
                         )}
-                        <span>{time.closeTime}</span>
+                        <span>{convertTime(time.closingHour)}</span>
                       </td>
                     </tr>
                   ))}
