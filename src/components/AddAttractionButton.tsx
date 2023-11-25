@@ -3,7 +3,7 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Attraction } from "@/types/attraction";
-import { addAttraction, removeAttraction } from "@/store/tripSlice";
+import { addScheduleItem, removeScheduleItem } from "@/store/tripThunk";
 
 interface AddAttractionButtonProps {
   attraction: Attraction;
@@ -13,13 +13,13 @@ export default function AddAttractionButton({
   attraction,
 }: AddAttractionButtonProps) {
   const dispatch = useAppDispatch();
-  const { selectedAttractions } = useAppSelector((state) => state.trip);
+  const { currentTrip, scheduleItems } = useAppSelector((state) => state.trip);
 
   const checkSelectedAttraction = () => {
     if (
-      selectedAttractions &&
-      selectedAttractions.length > 0 &&
-      selectedAttractions.find((selected) => selected.id === attraction.id)
+      scheduleItems &&
+      scheduleItems.length > 0 &&
+      scheduleItems.find((selected) => selected.attractionId === attraction.id)
     ) {
       return true;
     }
@@ -28,9 +28,19 @@ export default function AddAttractionButton({
 
   const clickAttraction = (attraction: Attraction) => {
     if (checkSelectedAttraction()) {
-      dispatch(removeAttraction(attraction));
+      const scheduleItem = scheduleItems.find(
+        (scheduleItem) => scheduleItem.attractionId === attraction.id,
+      );
+
+      if (scheduleItem) {
+        dispatch(removeScheduleItem(scheduleItem.id));
+      }
     } else {
-      dispatch(addAttraction(attraction));
+      const scheduleItem = {
+        attractionId: attraction.id,
+        tripId: currentTrip!.id,
+      };
+      dispatch(addScheduleItem(scheduleItem));
     }
   };
 

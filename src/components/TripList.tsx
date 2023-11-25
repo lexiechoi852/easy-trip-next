@@ -6,7 +6,7 @@ import { format, isSameDay } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { sortTripEvents } from "@/store/tripSlice";
 import { CalendarEvent } from "@/types/trip";
-import getDirection from "@/store/tripThunk";
+import { getDirection } from "@/store/tripThunk";
 import TripItem from "./TripItem";
 import CarIcon from "./icons/CarIcon";
 

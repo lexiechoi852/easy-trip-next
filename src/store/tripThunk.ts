@@ -20,6 +20,12 @@ interface AddTripItemAttributes {
   tripId: number;
 }
 
+interface UpdateTripItemAttributes {
+  id: number;
+  start: string;
+  end: string;
+}
+
 interface AddScheduleItemAttributes {
   attractionId: number;
   tripId: number;
@@ -169,6 +175,49 @@ export const addTripItem = createAsyncThunk<
 >("trip/addTripItem", async (data, thunkAPI) => {
   try {
     const res = await axios.post(`${API_BASE_URL}/trip-items`, data);
+    return res.data.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+    throw err;
+  }
+});
+
+export const updateTripItem = createAsyncThunk<
+  TripItem,
+  UpdateTripItemAttributes,
+  { rejectValue: string }
+>("trip/updateTripItem", async ({ id, start, end }, thunkAPI) => {
+  try {
+    const res = await axios.patch(`${API_BASE_URL}/trip-items/${id}`, {
+      start,
+      end,
+    });
+    return res.data.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+    throw err;
+  }
+});
+
+export const removeTripItem = createAsyncThunk<
+  TripItem,
+  number,
+  { rejectValue: string }
+>("trip/removeTripItem", async (tripItemId, thunkAPI) => {
+  try {
+    const res = await axios.delete(`${API_BASE_URL}/trip-items/${tripItemId}`);
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {

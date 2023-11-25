@@ -8,6 +8,8 @@ import {
   getAllTrips,
   getDirection,
   removeScheduleItem,
+  removeTripItem,
+  updateTripItem,
 } from "./tripThunk";
 
 export interface TripState {
@@ -40,27 +42,6 @@ export const tripSlice = createSlice({
   reducers: {
     setCurrentTrip: (state, action: PayloadAction<Trip>) => {
       state.currentTrip = action.payload;
-    },
-    editCalendarEvent: (
-      state,
-      action: PayloadAction<{ id: string; start: string; end: string }>,
-    ) => {
-      const calendarEvents = state.calendarEvents.map((event) => {
-        if (event.id === action.payload.id) {
-          return {
-            ...event,
-            start: action.payload.start,
-            end: action.payload.end,
-          };
-        }
-        return event;
-      });
-      state.calendarEvents = calendarEvents;
-    },
-    removeCalendarEvent: (state, action: PayloadAction<string>) => {
-      state.calendarEvents = state.calendarEvents.filter(
-        (event) => event.id !== action.payload,
-      );
     },
     sortTripEvents: (state) => {
       state.sortedTripEvents = state.calendarEvents.sort((a, b) => {
@@ -194,6 +175,54 @@ export const tripSlice = createSlice({
           state.errorMessage = action.payload;
         }
       })
+      .addCase(updateTripItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        updateTripItem.fulfilled,
+        (state, action: PayloadAction<TripItem>) => {
+          const calendarEvents = state.calendarEvents.map((event) => {
+            if (event.id === action.payload.id.toString()) {
+              return {
+                ...event,
+                start: action.payload.start,
+                end: action.payload.end,
+              };
+            }
+            return event;
+          });
+          state.calendarEvents = calendarEvents;
+          state.isLoading = false;
+        },
+      )
+      .addCase(updateTripItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(removeTripItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        removeTripItem.fulfilled,
+        (state, action: PayloadAction<TripItem>) => {
+          state.calendarEvents = state.calendarEvents.filter(
+            (event) => event.id !== action.payload.id.toString(),
+          );
+          state.isLoading = false;
+        },
+      )
+      .addCase(removeTripItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
       .addCase(getDirection.pending, (state) => {
         state.isLoading = true;
       })
@@ -215,11 +244,6 @@ export const tripSlice = createSlice({
   },
 });
 
-export const {
-  setCurrentTrip,
-  editCalendarEvent,
-  removeCalendarEvent,
-  sortTripEvents,
-} = tripSlice.actions;
+export const { setCurrentTrip, sortTripEvents } = tripSlice.actions;
 
 export default tripSlice.reducer;
