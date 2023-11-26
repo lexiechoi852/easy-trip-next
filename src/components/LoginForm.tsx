@@ -1,7 +1,8 @@
 "use client";
 
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { login } from "@/store/userThunk";
+import { Toast } from "flowbite-react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -10,6 +11,8 @@ import { object, string } from "yup";
 export default function LoginForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { errorMessage } = useAppSelector((state) => state.user);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -73,6 +76,14 @@ export default function LoginForm() {
           >
             Login
           </button>
+          {errorMessage && (
+            <Toast className="mt-3">
+              <div className="ml-3 text-sm font-semibold text-red-600">
+                {errorMessage}
+              </div>
+              <Toast.Toggle />
+            </Toast>
+          )}
         </Form>
       )}
     </Formik>
