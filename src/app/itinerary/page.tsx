@@ -1,6 +1,7 @@
 import React from "react";
 import TripList from "@/components/TripList";
 import Map from "@/components/Map";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export const metadata = {
   title: "Itinerary",
@@ -9,13 +10,15 @@ export const metadata = {
 
 export default function page() {
   return (
-    <div className="flex">
-      <div className="w-1/2">
-        <TripList />
+    <ProtectedRoute>
+      <div className="flex">
+        <div className="w-1/2">
+          <TripList />
+        </div>
+        <div className="w-1/2">
+          <Map />
+        </div>
       </div>
-      <div className="w-1/2">
-        <Map />
-      </div>
-    </div>
+    </ProtectedRoute>
   );
 }
