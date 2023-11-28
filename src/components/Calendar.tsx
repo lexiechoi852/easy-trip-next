@@ -5,10 +5,10 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import useTrip from "@/utils/useTrip";
 import dayjs from "dayjs";
 import {
   addTripItem,
+  getAllTripItems,
   removeScheduleItem,
   removeTripItem,
   updateTripItem,
@@ -17,18 +17,16 @@ import {
 export default function Calendar() {
   const dispatch = useAppDispatch();
 
-  const { addTrip } = useTrip();
-
   const { attractions } = useAppSelector((state) => state.attraction);
   const { scheduleItems, calendarEvents, currentTrip } = useAppSelector(
     (state) => state.trip,
   );
 
   useEffect(() => {
-    if (!currentTrip) {
-      addTrip();
+    if (currentTrip) {
+      dispatch(getAllTripItems(currentTrip.id));
     }
-  }, [dispatch, currentTrip, addTrip]);
+  }, [dispatch, currentTrip]);
 
   const calendarRef = useRef(null);
 

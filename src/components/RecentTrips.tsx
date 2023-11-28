@@ -1,13 +1,14 @@
 "use client";
 
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setCurrentTrip } from "@/store/tripSlice";
-import { Trip } from "@/types/trip";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import React, { useEffect } from "react";
-import { getAllTrips } from "@/store/tripThunk";
 import { format } from "date-fns";
+import { Trip } from "@/types/trip";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setCurrentTrip } from "@/store/tripSlice";
+import { getAllTrips } from "@/store/tripThunk";
+import getAllAttractions from "@/store/attractionThunk";
 
 export default function RecentTrips() {
   const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ export default function RecentTrips() {
     if (user) {
       dispatch(getAllTrips(user.id));
     }
+    dispatch(getAllAttractions());
   }, [dispatch, user]);
 
   const selectTrip = (trip: Trip) => {
