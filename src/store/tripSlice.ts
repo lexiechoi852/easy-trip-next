@@ -5,6 +5,7 @@ import {
   addTripItem,
   createTrip,
   getAllScheduleItems,
+  getAllTripItems,
   getAllTrips,
   getDirection,
   removeScheduleItem,
@@ -139,6 +140,38 @@ export const tripSlice = createSlice({
         },
       )
       .addCase(removeScheduleItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+
+        if (action.payload) {
+          state.errorMessage = action.payload;
+        }
+      })
+      .addCase(getAllTripItems.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getAllTripItems.fulfilled,
+        (state, action: PayloadAction<TripItem[]>) => {
+          const tripItems = [...action.payload];
+          const calendarEvents = tripItems.map((tripItem) => {
+            return {
+              id: tripItem.id.toString(),
+              title: tripItem.attraction.name,
+              description: tripItem.attraction.description,
+              image: tripItem.attraction.image,
+              start: tripItem.start,
+              end: tripItem.end,
+              latitude: tripItem.attraction.latitude,
+              longitude: tripItem.attraction.longitude,
+              overlap: false,
+            };
+          });
+          state.calendarEvents = calendarEvents;
+          state.isLoading = false;
+        },
+      )
+      .addCase(getAllTripItems.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
 
