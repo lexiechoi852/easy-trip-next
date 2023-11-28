@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import { Attraction } from "@/types/attraction";
-import { useAppDispatch } from "@/store/hooks";
-import { removeAttraction } from "@/store/tripSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { removeScheduleItem } from "@/store/tripThunk";
+import { ScheduleItem } from "@/types/trip";
 import MarkerIcon from "./icons/MarkerIcon";
 import TrashBinIcon from "./icons/TrashBinIcon";
 
 interface SelectedAttractionProps {
-  attraction: Attraction;
+  attraction: ScheduleItem;
   index: number;
 }
 
@@ -17,6 +17,18 @@ export default function SelectedAttraction({
   index,
 }: SelectedAttractionProps) {
   const dispatch = useAppDispatch();
+
+  const { scheduleItems } = useAppSelector((state) => state.trip);
+
+  const removeAttraction = () => {
+    const scheduleItem = scheduleItems.find(
+      (scheduleItem) => scheduleItem.id === attraction.id,
+    );
+
+    if (scheduleItem) {
+      dispatch(removeScheduleItem(scheduleItem.id));
+    }
+  };
 
   return (
     <div className="relative m-2 flex rounded-lg border p-2">
@@ -28,7 +40,8 @@ export default function SelectedAttraction({
       <button
         type="button"
         className="ml-auto"
-        onClick={() => dispatch(removeAttraction(attraction))}
+        onClick={removeAttraction}
+        aria-label="remove attraction"
       >
         <TrashBinIcon className="text-gray-800" />
       </button>
