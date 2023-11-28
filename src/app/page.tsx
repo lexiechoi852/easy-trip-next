@@ -2,13 +2,13 @@ import React from "react";
 import LoginSignUpSession from "@/components/LoginSignUpSession";
 
 export const metadata = {
-  title: "New Trip",
+  title: "Easy Trip",
   description: `Start planning your trip`,
 };
 
 export default function Home() {
   return (
-    <div className="container mx-auto flex h-full flex-wrap items-center px-5 py-36">
+    <div className="container mx-auto flex flex-wrap items-center px-5 py-36 md:h-full">
       <div className="flex h-full flex-col justify-center pr-0 md:w-1/2 md:pr-16 lg:w-3/5 lg:pr-0">
         <h2 className="text-4xl font-medium text-gray-900">
           The new way to plan your next trip
