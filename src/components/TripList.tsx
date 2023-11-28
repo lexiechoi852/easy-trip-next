@@ -35,13 +35,17 @@ export default function TripList() {
     }
   }, [sortedTripEvents, dispatch]);
 
-  const renderDate = (sortedTripEvent: CalendarEvent, index: number) => {
+  const checkSameDay = (sortedTripEvent: CalendarEvent, index: number) => {
     const previousIndex = index === 0 ? index : index - 1;
     const sameDay = isSameDay(
       new Date(sortedTripEvent.start),
       new Date(sortedTripEvents[previousIndex].start),
     );
-    if (!sameDay || index === 0) {
+    return sameDay;
+  };
+
+  const renderDate = (sortedTripEvent: CalendarEvent, index: number) => {
+    if (!checkSameDay(sortedTripEvent, index) || index === 0) {
       return (
         <div className="flex justify-center">
           <div className="mr-2 rounded-full bg-gray-100 px-4 py-2  text-sm font-medium text-gray-800">
@@ -53,8 +57,8 @@ export default function TripList() {
     return <div />;
   };
 
-  const renderTravelTime = (index: number) => {
-    if (index === 0) return <div />;
+  const renderTravelTime = (sortedTripEvent: CalendarEvent, index: number) => {
+    if (!checkSameDay(sortedTripEvent, index) || index === 0) return <div />;
 
     return (
       <div className="relative flex items-center justify-center">
@@ -76,9 +80,9 @@ export default function TripList() {
       {sortedTripEvents.length > 0 ? (
         <>
           {sortedTripEvents.map((calendarEvent, index) => (
-            <div className="flex flex-col gap-2" key={calendarEvent.id}>
+            <div className="flex flex-col" key={calendarEvent.id}>
               {renderDate(calendarEvent, index)}
-              {renderTravelTime(index)}
+              {renderTravelTime(calendarEvent, index)}
               <TripItem calendarEvent={calendarEvent} index={index} />
             </div>
           ))}
