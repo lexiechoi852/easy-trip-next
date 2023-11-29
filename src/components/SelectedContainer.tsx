@@ -15,7 +15,7 @@ export default function SelectedContainer() {
     if (currentTrip) {
       dispatch(getAllScheduleItems(currentTrip.id));
     }
-  }, []);
+  }, [dispatch, currentTrip]);
 
   return (
     <div className="max-w-[350px] rounded-lg border shadow-lg">
