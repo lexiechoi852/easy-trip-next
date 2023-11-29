@@ -1,6 +1,7 @@
 import { LoginSuccessResponse, User } from "@/types/user";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import type { RootState } from "./index";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
@@ -58,10 +59,16 @@ export const login = createAsyncThunk<
 export const logout = createAsyncThunk<
   { message: string },
   void,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("user/logout", async (_, thunkAPI) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/logout`);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.post(`${API_BASE_URL}/logout`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {

@@ -1,6 +1,7 @@
 import { ScheduleItem, Trip, TripItem } from "@/types/trip";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import type { RootState } from "./index";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
@@ -59,10 +60,16 @@ export const getDirection = createAsyncThunk<
 export const createTrip = createAsyncThunk<
   Trip,
   CreateTripAttributes,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/createTrip", async (trip, thunkAPI) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/trips`, trip);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.post(`${API_BASE_URL}/trips`, trip, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -79,10 +86,16 @@ export const createTrip = createAsyncThunk<
 export const getAllTrips = createAsyncThunk<
   Trip[],
   number,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/getAllTrips", async (userId, thunkAPI) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/trips/user/${userId}`);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.get(`${API_BASE_URL}/trips/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     if (res.data.data) {
       return res.data.data;
@@ -103,11 +116,18 @@ export const getAllTrips = createAsyncThunk<
 export const getAllScheduleItems = createAsyncThunk<
   ScheduleItem[],
   number,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/getAllScheduleItems", async (tripId, thunkAPI) => {
   try {
+    const { accessToken } = thunkAPI.getState().user;
+
     const res = await axios.get(
       `${API_BASE_URL}/schedule-items/trip/${tripId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
     );
 
     if (res.data.data) {
@@ -129,10 +149,16 @@ export const getAllScheduleItems = createAsyncThunk<
 export const addScheduleItem = createAsyncThunk<
   ScheduleItem,
   AddScheduleItemAttributes,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/addScheduleItem", async (data, thunkAPI) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/schedule-items`, data);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.post(`${API_BASE_URL}/schedule-items`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -149,11 +175,18 @@ export const addScheduleItem = createAsyncThunk<
 export const removeScheduleItem = createAsyncThunk<
   ScheduleItem,
   number,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/removeScheduleItem", async (scheduleItemId, thunkAPI) => {
   try {
+    const { accessToken } = thunkAPI.getState().user;
+
     const res = await axios.delete(
       `${API_BASE_URL}/schedule-items/${scheduleItemId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
     );
     return res.data.data;
   } catch (err) {
@@ -171,10 +204,16 @@ export const removeScheduleItem = createAsyncThunk<
 export const getAllTripItems = createAsyncThunk<
   TripItem[],
   number,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/getAllTripItems", async (tripId, thunkAPI) => {
   try {
-    const res = await axios.get(`${API_BASE_URL}/trip-items/trip/${tripId}`);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.get(`${API_BASE_URL}/trip-items/trip/${tripId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -191,10 +230,16 @@ export const getAllTripItems = createAsyncThunk<
 export const addTripItem = createAsyncThunk<
   TripItem,
   AddTripItemAttributes,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/addTripItem", async (data, thunkAPI) => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/trip-items`, data);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.post(`${API_BASE_URL}/trip-items`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -211,13 +256,23 @@ export const addTripItem = createAsyncThunk<
 export const updateTripItem = createAsyncThunk<
   TripItem,
   UpdateTripItemAttributes,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/updateTripItem", async ({ id, start, end }, thunkAPI) => {
   try {
-    const res = await axios.patch(`${API_BASE_URL}/trip-items/${id}`, {
-      start,
-      end,
-    });
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.patch(
+      `${API_BASE_URL}/trip-items/${id}`,
+      {
+        start,
+        end,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -234,10 +289,16 @@ export const updateTripItem = createAsyncThunk<
 export const removeTripItem = createAsyncThunk<
   TripItem,
   number,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >("trip/removeTripItem", async (tripItemId, thunkAPI) => {
   try {
-    const res = await axios.delete(`${API_BASE_URL}/trip-items/${tripItemId}`);
+    const { accessToken } = thunkAPI.getState().user;
+
+    const res = await axios.delete(`${API_BASE_URL}/trip-items/${tripItemId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return res.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
