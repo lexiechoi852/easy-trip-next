@@ -4,53 +4,63 @@ import React, { useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import dayjs from "dayjs";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import dayjs from "dayjs";
 import {
-  addAttractionToCalendar,
-  addTrip,
-  editCalendarEvent,
-  removeCalendarEvent,
-} from "@/store/tripSlice";
+  addTripItem,
+  getAllTripItems,
+  removeScheduleItem,
+  removeTripItem,
+  updateTripItem,
+} from "@/store/tripThunk";
 
 export default function Calendar() {
   const dispatch = useAppDispatch();
-  const { calendarEvents, trips } = useAppSelector((state) => state.trip);
+
+  const { attractions } = useAppSelector((state) => state.attraction);
+  const { scheduleItems, calendarEvents, currentTrip } = useAppSelector(
+    (state) => state.trip,
+  );
 
   useEffect(() => {
-    if (trips.length === 0) {
-      const newTrip = {
-        city: "toronto",
-        startDate: new Date().toISOString(),
-        endDate: dayjs().add(5, "day").toISOString(),
-      };
-      dispatch(addTrip(newTrip));
+    if (currentTrip) {
+      dispatch(getAllTripItems(currentTrip.id));
     }
-  }, [dispatch, trips.length]);
-
-  useEffect(() => {
-    console.log(calendarEvents, "calendarEvents");
-  }, [calendarEvents]);
+  }, [dispatch, currentTrip]);
 
   const calendarRef = useRef(null);
 
   const handleEventChange = (eventInfo: any) => {
-    console.log(eventInfo, "handleEventChange info");
     const newEventInfo = {
       id: eventInfo.oldEvent.id,
       start: eventInfo.event.start.toISOString(),
       end: eventInfo.event.end.toISOString(),
     };
-    dispatch(editCalendarEvent(newEventInfo));
+    dispatch(updateTripItem(newEventInfo));
   };
 
   const handleExternalEventDrop = (dropInfo: any) => {
-    console.log(dropInfo, "handleExternalEventDrop info");
-    const newEvent = {
-      title: dropInfo.draggedEl.title,
-      date: dropInfo.date.toISOString(),
-    };
-    dispatch(addAttractionToCalendar(newEvent));
+    const attraction = attractions.find(
+      (attraction) => attraction.name === dropInfo.draggedEl.title,
+    );
+
+    if (currentTrip && attraction) {
+      const scheduleItem = scheduleItems.find(
+        (scheduleItem) => scheduleItem.attractionId === attraction.id,
+      );
+
+      const newEvent = {
+        overlap: false,
+        start: dropInfo.date.toISOString(),
+        end: dayjs(new Date(dropInfo.date)).add(2, "hour").toISOString(),
+        attractionId: attraction.id,
+        tripId: currentTrip.id,
+      };
+      dispatch(addTripItem(newEvent));
+      if (scheduleItem) {
+        dispatch(removeScheduleItem(scheduleItem.id));
+      }
+    }
   };
 
   const handleEventClick = (info: any) => {
@@ -70,7 +80,6 @@ export default function Calendar() {
   };
 
   const handleEventDrag = (eventInfo: any) => {
-    console.log(eventInfo, "handleEventDrag info");
     if (!calendarRef.current) return;
     if (
       isInsideCalendar(
@@ -81,7 +90,7 @@ export default function Calendar() {
       return;
     eventInfo.event.remove();
     const eventId = eventInfo.event.id;
-    dispatch(removeCalendarEvent(eventId));
+    dispatch(removeTripItem(eventId));
   };
 
   return (
@@ -91,6 +100,7 @@ export default function Calendar() {
         ref={calendarRef}
         eventDurationEditable
         initialView="timeGridWeek"
+        initialDate={currentTrip ? currentTrip.startDate : new Date()}
         allDaySlot={false}
         events={calendarEvents}
         eventDrop={handleEventChange}

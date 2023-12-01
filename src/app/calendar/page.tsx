@@ -1,6 +1,7 @@
 import React from "react";
 import Calendar from "@/components/Calendar";
 import ScheduleItemContainer from "@/components/ScheduleItemContainer";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export const metadata = {
   title: "Calendar",
@@ -9,9 +10,11 @@ export const metadata = {
 
 export default function page() {
   return (
-    <div className="flex">
-      <ScheduleItemContainer />
-      <Calendar />
-    </div>
+    <ProtectedRoute>
+      <div className="flex">
+        <ScheduleItemContainer />
+        <Calendar />
+      </div>
+    </ProtectedRoute>
   );
 }

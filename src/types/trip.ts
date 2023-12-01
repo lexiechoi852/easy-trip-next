@@ -1,16 +1,11 @@
+import { Attraction } from "./attraction";
+
 export interface Trip {
-  id: string;
+  id: number;
   name: string;
   city: string;
   startDate: string;
   endDate: string;
-  scheduleItems: CalendarEvent[];
-}
-
-export interface ScheduleItem {
-  id: number;
-  title: string;
-  duration: string;
 }
 
 export interface CalendarEvent {
@@ -21,6 +16,23 @@ export interface CalendarEvent {
   start: string;
   end: string;
   overlap: boolean;
+  latitude: number;
+  longitude: number;
+}
+
+export interface TripItem {
+  id: number;
+  start: string;
+  end: string;
+  overlap: boolean;
+  attraction: Attraction;
+}
+
+export interface ScheduleItem {
+  id: number;
+  attractionId: number;
+  tripId: number;
+  name: string;
   latitude: number;
   longitude: number;
 }

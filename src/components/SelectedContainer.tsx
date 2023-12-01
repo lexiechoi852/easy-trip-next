@@ -1,24 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getAllScheduleItems } from "@/store/tripThunk";
 import SelectedAttraction from "./SelectedAttraction";
 
 export default function SelectedContainer() {
-  const { selectedAttractions } = useAppSelector((state) => state.trip);
+  const dispatch = useAppDispatch();
+
+  const { currentTrip, scheduleItems } = useAppSelector((state) => state.trip);
+
+  useEffect(() => {
+    if (currentTrip) {
+      dispatch(getAllScheduleItems(currentTrip.id));
+    }
+  }, [dispatch, currentTrip]);
 
   return (
-    <div className="mr-2 min-w-[260px] rounded-lg border shadow-lg">
+    <div className="max-w-[350px] rounded-lg border shadow-lg">
       <div className="text-center text-lg font-semibold text-gray-800">
         Selected Attractions
       </div>
-      {selectedAttractions && selectedAttractions.length > 0 ? (
+      {scheduleItems && scheduleItems.length > 0 ? (
         <div>
-          {selectedAttractions.map((attraction, index) => (
+          {scheduleItems.map((scheduleItem, index) => (
             <SelectedAttraction
-              key={attraction.id}
-              attraction={attraction}
+              key={scheduleItem.id}
+              attraction={scheduleItem}
               index={index}
             />
           ))}

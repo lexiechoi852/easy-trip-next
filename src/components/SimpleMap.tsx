@@ -5,7 +5,7 @@ import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useAppSelector } from "@/store/hooks";
 
 export default function SimpleMap() {
-  const { selectedAttractions } = useAppSelector((state) => state.trip);
+  const { scheduleItems } = useAppSelector((state) => state.trip);
 
   const libraries = useMemo(() => ["places"], []);
 
@@ -54,11 +54,14 @@ export default function SimpleMap() {
       mapTypeId={google.maps.MapTypeId.ROADMAP}
       mapContainerStyle={{ height: "300px" }}
     >
-      {selectedAttractions.length > 0 &&
-        selectedAttractions.map((attraction, index) => (
+      {scheduleItems.length > 0 &&
+        scheduleItems.map((scheduleItem, index) => (
           <Marker
-            key={attraction.id}
-            position={{ lat: attraction.latitude, lng: attraction.longitude }}
+            key={scheduleItem.id}
+            position={{
+              lat: scheduleItem.latitude,
+              lng: scheduleItem.longitude,
+            }}
             label={{
               className: "font-bold",
               color: "white",
