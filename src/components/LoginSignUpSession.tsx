@@ -16,27 +16,39 @@ export default function LoginSignUpSession() {
     }
   }, [user, accessToken, router]);
 
-  const [tab, setTab] = useState<string>("login");
+  const [currentTab, setCurrentTab] = useState<string>("login");
+
+  const generateClassName = (tab: string) => {
+    const roundedCss = tab === "login" ? "rounded-l-lg" : "rounded-r-lg";
+
+    let className = `w-1/2 ${roundedCss} bg-gray-200 px-4 py-2 font-bold hover:text-gray-900 hover:bg-gray-300`;
+    if (currentTab === tab) {
+      className = `w-1/2 ${roundedCss} px-4 py-2 font-bold text-white bg-blue-500`;
+      return className;
+    }
+    return className;
+  };
+
   return (
     <div>
       <div className="inline-flex w-full">
         <button
           type="button"
-          onClick={() => setTab("login")}
-          className="w-1/2 rounded-l bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
+          onClick={() => setCurrentTab("login")}
+          className={generateClassName("login")}
         >
           Login
         </button>
         <button
           type="button"
-          onClick={() => setTab("signUp")}
-          className="w-1/2 rounded-r bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
+          onClick={() => setCurrentTab("signUp")}
+          className={generateClassName("signUp")}
         >
           Sign Up
         </button>
       </div>
       <div className="mt-2">
-        {tab === "login" ? (
+        {currentTab === "login" ? (
           <div className="flex flex-col gap-2">
             <h3 className="text-center text-xl font-bold text-gray-700">
               Login
@@ -48,7 +60,7 @@ export default function LoginSignUpSession() {
             <h3 className="text-center text-xl font-bold text-gray-700">
               Sign Up
             </h3>
-            <SignUpForm setTab={setTab} />
+            <SignUpForm setCurrentTab={setCurrentTab} />
           </div>
         )}
       </div>
