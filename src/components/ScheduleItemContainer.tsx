@@ -11,11 +11,12 @@ export default function ScheduleItemContainer() {
   const createDraggleItems = () => {
     const draggableEl: HTMLElement | null =
       document.getElementById("external-events");
+
     if (draggableEl) {
-      const draggle = new Draggable(draggableEl, {
+      // eslint-disable-next-line no-new
+      new Draggable(draggableEl, {
         itemSelector: ".fc-event",
       });
-      console.log(draggle, "draggle");
     }
   };
 
