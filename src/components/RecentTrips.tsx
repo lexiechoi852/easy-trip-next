@@ -50,7 +50,7 @@ export default function RecentTrips() {
                   alt="Picture of Toronto"
                 />
               </div>
-              <div className="flex items-center text-gray-700">
+              <div className="flex w-full items-center text-gray-700">
                 <div className="text-lg font-bold">Trip to Toronto</div>
                 <div className="ml-auto flex text-sm">
                   <div>{format(new Date(trip.startDate), "dd MMM")}</div>

@@ -8,9 +8,9 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { object, ref, string } from "yup";
 
 interface SignUpFormProps {
-  setTab: Dispatch<SetStateAction<string>>;
+  setCurrentTab: Dispatch<SetStateAction<string>>;
 }
-export default function SignUpForm({ setTab }: SignUpFormProps) {
+export default function SignUpForm({ setCurrentTab }: SignUpFormProps) {
   const dispatch = useAppDispatch();
 
   const { errorMessage } = useAppSelector((state) => state.user);
@@ -36,7 +36,7 @@ export default function SignUpForm({ setTab }: SignUpFormProps) {
         const { name, email, password } = values;
         dispatch(signUp({ name, email, password })).then((res) => {
           if (res.type.includes("fulfilled")) {
-            setTab("login");
+            setCurrentTab("login");
             resetForm();
           }
         });
@@ -115,7 +115,7 @@ export default function SignUpForm({ setTab }: SignUpFormProps) {
           </div>
           <div className="flex justify-end gap-3">
             <button
-              className="rounded-lg border bg-gray-300 px-4 py-2 font-bold hover:bg-gray-500 hover:text-white"
+              className="rounded-lg border bg-gray-200 px-4 py-2 font-bold hover:bg-gray-500 hover:text-white"
               type="button"
               onClick={() => resetForm()}
             >
