@@ -41,6 +41,7 @@ export default function LoginForm() {
           <label className="mb-2 block font-bold text-gray-700" htmlFor="email">
             Email
             <input
+              id="email"
               type="text"
               name="email"
               placeholder="Email"
@@ -51,10 +52,11 @@ export default function LoginForm() {
           <div className="relative w-full">
             <label
               className="mb-2 block font-bold text-gray-700"
-              htmlFor="Password"
+              htmlFor="password"
             >
               Password
               <input
+                id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
