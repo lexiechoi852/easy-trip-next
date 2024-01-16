@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import StoreProvider from "@/providers/store-provider";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +17,11 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
+      {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
+        <GoogleAnalytics
+          measurementId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}
+        />
+      ) : null}
       <body>
         <StoreProvider>
           <Header />
