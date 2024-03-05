@@ -16,6 +16,19 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const loginAsDemoAccount = () => {
+    const email = process.env.NEXT_PUBLIC_DEMO_EMAIL;
+    const password = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+
+    if (email && password) {
+      dispatch(login({ email, password })).then((res) => {
+        if (res.type.includes("fulfilled")) {
+          router.push("/trips");
+        }
+      });
+    }
+  };
+
   const validationSchema = object({
     email: string().required(),
     password: string().required(),
@@ -72,12 +85,21 @@ export default function LoginForm() {
               Show
             </button>
           </div>
-          <button
-            type="submit"
-            className="items-end rounded-lg border bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-          >
-            Login
-          </button>
+          <div className="flex flex-col gap-2">
+            <button
+              type="submit"
+              className="items-end rounded-lg border bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              onClick={loginAsDemoAccount}
+              className="items-end rounded-lg border bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700 focus:outline-none"
+            >
+              Login in as Demo Account
+            </button>
+          </div>
           {errorMessage && (
             <Toast className="mt-3">
               <div className="ml-3 text-sm font-semibold text-red-600">
