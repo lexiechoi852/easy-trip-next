@@ -32,7 +32,7 @@ export default function RecentTrips() {
   return (
     <div className="flex flex-col gap-2">
       <h2 className="text-4xl font-medium text-gray-900">Recent Trips</h2>
-      <div className="mx-auto flex flex-wrap justify-center gap-4 lg:justify-start">
+      <div className="mx-auto flex flex-wrap justify-start gap-4">
         {trips.length > 0 ? (
           trips.map((trip) => (
             <button
