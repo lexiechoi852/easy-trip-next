@@ -1,5 +1,6 @@
 import React from "react";
 import LoginSignUpSession from "@/components/LoginSignUpSession";
+import MobileModal from "@/components/MobileModal";
 
 export const metadata = {
   title: "Easy Trip",
@@ -20,6 +21,7 @@ export default function Home() {
       <div className="mt-10 flex w-full flex-col rounded-lg bg-gray-100 p-8 md:ml-auto md:mt-0 md:w-1/2 lg:w-2/6">
         <LoginSignUpSession />
       </div>
+      <MobileModal />
     </div>
   );
 }
