@@ -7,6 +7,7 @@ export interface UserState {
   accessToken: string | null;
   isLoading: boolean;
   isError: boolean;
+  isMobileAlertDisable: boolean;
   message: string;
   errorMessage: string;
 }
@@ -16,6 +17,7 @@ const initialState: UserState = {
   accessToken: null,
   isLoading: false,
   isError: false,
+  isMobileAlertDisable: false,
   message: "",
   errorMessage: "",
 };
@@ -23,7 +25,11 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    disableAlert: (state) => {
+      state.isMobileAlertDisable = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {
@@ -78,5 +84,5 @@ export const userSlice = createSlice({
       });
   },
 });
-
+export const { disableAlert } = userSlice.actions;
 export default userSlice.reducer;
