@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import StoreProvider from "@/providers/store-provider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,6 +28,7 @@ export default async function RootLayout({
           <Header />
           <main>{children}</main>
         </StoreProvider>
+        <Analytics />
       </body>
     </html>
   );
