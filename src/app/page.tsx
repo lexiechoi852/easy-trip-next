@@ -1,5 +1,6 @@
 import React from "react";
 import LoginSignUpSession from "@/components/LoginSignUpSession";
+import WarningModal from "@/components/WarningModal";
 import MobileModal from "@/components/MobileModal";
 
 export const metadata = {
@@ -21,6 +22,7 @@ export default function Home() {
       <div className="mt-10 flex w-full flex-col rounded-lg bg-gray-100 p-8 md:ml-auto md:mt-0 md:w-1/2 lg:w-2/6">
         <LoginSignUpSession />
       </div>
+      <WarningModal />
       <MobileModal />
     </div>
   );
